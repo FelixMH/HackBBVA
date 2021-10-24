@@ -6,5 +6,5 @@ type Transacciones struct {
 	DatosTarjeta      string
 	DatosComercio     string
 	FechaTransaccion  string
-	idBanco           *Bancos
+	IdBanco           *Bancos
 }

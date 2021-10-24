@@ -7,5 +7,5 @@ type Terminales struct {
 	Marca            string
 	Modelo           string
 	BancoProcedencia string
-	idCliente        *Clientes
+	IdCliente        *Clientes
 }

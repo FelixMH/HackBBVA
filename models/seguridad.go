@@ -2,10 +2,10 @@ package models
 
 type SeguridadStruct struct {
 	IdSeguridad   string
-	idBanco       *Bancos
-	idCliente     *Clientes
-	idTransaccion *Transacciones
-	idTerminal    *Terminales
-	codigoPaquete string
-	error         string
+	IdBanco       *Bancos
+	IdCliente     *Clientes
+	IdTransaccion *Transacciones
+	IdTerminal    *Terminales
+	CodigoPaquete string
+	Error         string
 }
