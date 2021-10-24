@@ -1,35 +1,30 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"os"
-
+	"github.com/FelixMH/HackBBVA/config"
 	"github.com/FelixMH/HackBBVA/handler"
 	"github.com/FelixMH/HackBBVA/models"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
-var _ = godotenv.Load(".env") // carga el archivo .env que contiene las credenciales
-var (
-	ConnectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", //define la conexion a la bd
-		os.Getenv("user"),
-		os.Getenv("pass"),
-		os.Getenv("host"),
-		os.Getenv("port"),
-		os.Getenv("db_name"))
-)
+// var _ = godotenv.Load(".env") // carga el archivo .env que contiene las credenciales
+// var ConnectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", //define la conexion a la bd
+// 		os.Getenv("user"),
+// 		os.Getenv("pass"),
+// 		os.Getenv("host"),
+// 		os.Getenv("port"),
+// 		os.Getenv("db_name"))
+
 
 const AllowedCORSDomain = "http://localhost" //AHORA SI PUSE LA INICIAL DE LA VARIABLE EN MAYUSCULA AAAAAAAAAAAAA 👺
 
-func getDB() (*sql.DB, error) { //conecta mysql con go
-	return sql.Open("mysql", ConnectionString)
-}
+// func getDB() (*sql.DB, error) { //conecta mysql con go
+// 	return sql.Open("mysql", ConnectionString)
+// }
 
 //CRUD de terminales 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 func InsertTerminalBD(Terminal models.Terminales) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -38,7 +33,7 @@ func InsertTerminalBD(Terminal models.Terminales) error {
 }
 
 func DeleteTerminalBD(Id string) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -47,7 +42,7 @@ func DeleteTerminalBD(Id string) error {
 }
 
 func UpdateTerminalBD(Terminal models.Terminales) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -58,7 +53,7 @@ func UpdateTerminalBD(Terminal models.Terminales) error {
 func SelectTerminales() ([]models.Terminales, error) { // trae todas las terminales
 	//se declara un arreglo , si hay un error lo regresa vacio
 	terminales := []models.Terminales{}
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return terminales, err
 	}
@@ -82,7 +77,7 @@ func SelectTerminales() ([]models.Terminales, error) { // trae todas las termina
 
 func SelectTerminalIdDB(id string) (models.Terminales, error) { //solo trae una terminal por id
 	var terminal models.Terminales
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return terminal, err
 	}
@@ -95,19 +90,20 @@ func SelectTerminalIdDB(id string) (models.Terminales, error) { //solo trae una 
 	return terminal, nil
 }
 
-//crud banco 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+// crud banco 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 
 func InsertBancoBD(Banco models.Bancos) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
+
 	_, err = bd.Exec("INSERT INTO banco (idBanco, idCliente, idSeguridad, idTransaccion,Nombre) VALUES (?,?,?,?,?)", Banco.IdBanco, Banco.IdCliente, Banco.IdSeguridad, Banco.IdTransaccion, Banco.Nombre)
 	return err
 }
 
 func DeleteBancoBD(Id string) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -116,7 +112,7 @@ func DeleteBancoBD(Id string) error {
 }
 
 func UpdateBancoBD(Banco models.Bancos) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -127,7 +123,7 @@ func UpdateBancoBD(Banco models.Bancos) error {
 func SelectBancos() ([]models.Bancos, error) { // trae todas las terminales
 	//se declara un arreglo , si hay un error lo regresa vacio
 	bancos := []models.Bancos{}
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return bancos, err
 	}
@@ -152,7 +148,7 @@ func SelectBancos() ([]models.Bancos, error) { // trae todas las terminales
 //crud Clientes 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 
 func InsertClienteBD(Cliente models.Clientes) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -161,7 +157,7 @@ func InsertClienteBD(Cliente models.Clientes) error {
 }
 
 func DeleteClienteBD(Id string) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -170,7 +166,7 @@ func DeleteClienteBD(Id string) error {
 }
 
 func UpdateClienteBD(Cliente models.Clientes) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -181,7 +177,7 @@ func UpdateClienteBD(Cliente models.Clientes) error {
 func SelectClientes() ([]models.Clientes, error) { // trae todas las terminales
 	//se declara un arreglo , si hay un error lo regresa vacio
 	clientes := []models.Clientes{}
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return clientes, err
 	}
@@ -205,7 +201,7 @@ func SelectClientes() ([]models.Clientes, error) { // trae todas las terminales
 
 func SelectClienteIdDB(id string) (models.Clientes, error) { //solo trae una terminal por id
 	var cliente models.Clientes
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return cliente, err
 	}
@@ -220,7 +216,7 @@ func SelectClienteIdDB(id string) (models.Clientes, error) { //solo trae una ter
 
 //crud seguridad 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 func InsertSeguridadBD(Seguridad models.SeguridadStruct) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -229,7 +225,7 @@ func InsertSeguridadBD(Seguridad models.SeguridadStruct) error {
 }
 
 func DeleteSeguridadBD(Id string) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -238,7 +234,7 @@ func DeleteSeguridadBD(Id string) error {
 }
 
 func UpdateSeguridadBD(Seguridad models.SeguridadStruct) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -249,7 +245,7 @@ func UpdateSeguridadBD(Seguridad models.SeguridadStruct) error {
 func SelectSeguridad() ([]models.SeguridadStruct, error) { // trae todas las terminales
 	//se declara un arreglo , si hay un error lo regresa vacio
 	seguros := []models.SeguridadStruct{}
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return seguros, err
 	}
@@ -273,7 +269,7 @@ func SelectSeguridad() ([]models.SeguridadStruct, error) { // trae todas las ter
 
 func SelectSeguridadIdDB(id string) (models.SeguridadStruct, error) { //solo trae una terminal por id
 	var seguridad models.SeguridadStruct
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return seguridad, err
 	}
@@ -288,7 +284,7 @@ func SelectSeguridadIdDB(id string) (models.SeguridadStruct, error) { //solo tra
 
 //crud transacciones 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
 func InsertTransaccionBD(Transaccion models.Transacciones) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -297,7 +293,7 @@ func InsertTransaccionBD(Transaccion models.Transacciones) error {
 }
 
 func DeleteTransaccionBD(Id string) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -306,7 +302,7 @@ func DeleteTransaccionBD(Id string) error {
 }
 
 func UpdateTransaccionBD(Transaccion models.Transacciones) error {
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return err
 	}
@@ -317,7 +313,7 @@ func UpdateTransaccionBD(Transaccion models.Transacciones) error {
 func SelectTransacciones() ([]models.Transacciones, error) { // trae todas las terminales
 	//se declara un arreglo , si hay un error lo regresa vacio
 	transacciones := []models.Transacciones{}
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return transacciones, err
 	}
@@ -341,7 +337,7 @@ func SelectTransacciones() ([]models.Transacciones, error) { // trae todas las t
 
 func SelectTransaccionIdDB(id string) (models.Transacciones, error) { //solo trae una terminal por id
 	var transaccion models.Transacciones
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return transaccion, err
 	}
@@ -358,7 +354,7 @@ func SelectTransaccionIdDB(id string) (models.Transacciones, error) { //solo tra
 
 func SelectModeloTerminalDB(id string) (models.Terminales, error) { //selecciona el modelo de la terminal
 	var terminal models.Terminales
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return terminal, err
 	}
@@ -373,7 +369,7 @@ func SelectModeloTerminalDB(id string) (models.Terminales, error) { //selecciona
 
 func SelectMarcaTerminalDB(id string) (models.Terminales, error) { //selecciona la marca de la terminal
 	var terminal models.Terminales
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return terminal, err
 	}
@@ -388,7 +384,7 @@ func SelectMarcaTerminalDB(id string) (models.Terminales, error) { //selecciona 
 
 func SelectNumTransaccionTerminalDB(id string) (models.Terminales, error) { //selecciona el codigo de paquete de terminal
 	var terminal models.Terminales
-	bd, err := getDB()
+	bd, err := config.GetDB()
 	if err != nil {
 		return terminal, err
 	}

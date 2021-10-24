@@ -26,9 +26,34 @@ func CreateBancoEndpoint(w http.ResponseWriter, req *http.Request) { //devuelve 
 	params := mux.Vars(req)
 	var Bancos models.Bancos
 	_ = json.NewDecoder(req.Body).Decode(&Bancos)
+
+	// guardar := models.Bancos{
+	// 	IdBanco: params["idBanco"],
+	// 	Nombre: params["Nombre"],
+	// 	IdSeguridad: &models.SeguridadStruct{
+	// 		IdSeguridad: params["idSeguridad"],
+	// 		CodigoPaquete: params["CodigoPaquete"],
+	// 	},
+	// 	IdCliente: &models.Clientes{
+	// 		IdCliente: params["idCliente"],
+	// 	},
+	// 	IdTransaccion: &models.Transacciones{
+	// 		IdTransaccion: params["idTransaccion"],
+	// 	},
+	// }
+
+	// err := bd.InsertBancoBD(guardar)
+	// if err != nil {
+	// 	http.Error(w,"Ocurrió un error al intentar enviar el registro.", 400)
+	// 	return
+	// }
 	Bancos.IdBanco = params["idBanco"]
 	banco = append(banco, Bancos)
 	json.NewEncoder(w).Encode(banco)
+	
+	w.WriteHeader(http.StatusCreated)
+
+
 }
 
 func DeleteBancoEndpoint(w http.ResponseWriter, req *http.Request) { //devuelve algo al navegador, deevuelve algo al servidor

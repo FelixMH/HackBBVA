@@ -6,21 +6,22 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 
 	"github.com/FelixMH/HackBBVA/routes"
 )
 
 func Manejadores() {
 	router := mux.NewRouter()
-	router.HandleFunc("/banco", routes.GetBancosEndpoint).Methods("GET")
+
+
+	router.HandleFunc("/bancos", routes.GetBancosEndpoint).Methods("GET")
+	router.HandleFunc("/banco", routes.CreateBancoEndpoint).Methods("POST")
 	router.HandleFunc("/cliente", routes.GetClientesEndpoint).Methods("GET")
 	router.HandleFunc("/seguridad", routes.GetSeguridadStructEndpoint).Methods("GET")
 	router.HandleFunc("/terminal", routes.GetTerminalEndpoint).Methods("GET")
 	router.HandleFunc("/transaccion", routes.GetTransaccionesEndpoint).Methods("GET")
 
 	router.HandleFunc("/banco/{idBanco}", routes.GetBancoEndpoint).Methods("GET")
-	router.HandleFunc("/banco/{idBanco}", routes.CreateBancoEndpoint).Methods("POST")
 	router.HandleFunc("/banco/{idBanco}", routes.DeleteBancoEndpoint).Methods("DELETE")
 
 	router.HandleFunc("/cliente/{idCliente}", routes.GetClienteEndpoint).Methods("GET")
@@ -41,11 +42,13 @@ func Manejadores() {
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
-		PORT = "8080"
+		PORT = "3000"
 	}
 
-	handler := cors.AllowAll().Handler(router)
-	log.Fatal(http.ListenAndServe(":"+PORT, handler))
+	//handler := cors.AllowAll().Handler(router)
+	//log.Fatal(http.ListenAndServe(":"+PORT, handler))
+	http.ListenAndServe(":3000", router)
+	log.Fatal(http.ListenAndServe(":3000", router))
 }
 
 
